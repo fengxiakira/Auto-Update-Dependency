@@ -10,7 +10,7 @@ const dependencies = packageInfo.map((element) => dependenciesItem(element));
 
 const config = {
     dependencies: dependencies,
-    projectsToUpdate: [{ name: '' }, { name: '' }],
+    projectsToUpdate: [{ name: 'emaily' }],
 };
 
 module.exports = { config };

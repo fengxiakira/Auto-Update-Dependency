@@ -20,13 +20,12 @@ const ESLINT_RENAME = 'ignoreLint.js';
 const SUMMARY_FILE = 'summary.txt';
 
 
-const projectGitPackages = projectsToUpdate.map(({ name }) => name.replace(/@/gi, '').replace(/\//gi, '-'));
-const projectGitPath = (prefix='git') => {
+const projectGitPath = (userName) => {
     if(commandArgv.SSH){
-        return projectGitPackages.map((name) => `${prefix}@bitbucket.org:signiant/${name}.git`);
+        return projectsToUpdate.map(({name}) => `git@github.com:${userName}/${name}.git`);
     }
     if(commandArgv.HTTPS){
-        return projectGitPackages.map((name) => `${prefix}@bitbucket.org/signiant/${name}.git`);
+        return projectsToUpdate.map(({name}) => `https://github.com/${userName}/${name}.git`);
     }
 } ;
 
@@ -36,26 +35,10 @@ const installProjects = () => {
         console.log('Creating projectToUpdate directory');
         fs.mkdirSync(projectToUpdateDirectory);
     }
-    if(commandArgv.SSH){
-        const code = projectGitPath(userName).map((package) =>
-            runShellScriptNoExit(`cd ./projects-to-update && git clone ${package}`)
-        );
-        // code 128 : permission denied error code
-        // In case anyone use git@bitbucket.org as the repositoryURL prefix
-        if (code.includes(128)) {
-            projectGitPath().forEach((package) => runShellScript(`cd ./projects-to-update && git clone ${package}`));
-        }
-    }
-    if(commandArgv.HTTPS){
-        const code = projectGitPath(`https://${userName}`).map((package) =>
-            runShellScriptNoExit(`cd ./projects-to-update && git clone ${package}`)
-        );
-        // code 128 : permission denied error code
-        // In case anyone use git@bitbucket.org as the repositoryURL prefix
-        if (code.includes(128)) {
-            projectGitPath('https://git').forEach((package) => runShellScript(`cd ./projects-to-update && git clone ${package}`));
-        }
-    }
+
+    const code = projectGitPath(userName).map((package) =>
+        runShellScriptNoExit(`cd ./projects-to-update && git clone ${package}`)
+    );
 
 };
 
@@ -71,7 +54,7 @@ const commitUpgradedProjectToNewBranch = async (folderName) => {
     runShellScript(`git checkout -b ${getDatedBranchName()}`);
     runShellScript('git add . && git commit -m "New packages updates available."');
     runShellScript(`git push -u origin ${getDatedBranchName()}`);
-    await open(`https://bitbucket.org/signiant/${folderName}/branch/${getDatedBranchName()}`);
+    await open(``);
 }
 
 const validateUpgradedProject = async (result,folderName,isPackageJsonInAppFolder) => {
@@ -130,7 +113,9 @@ const upgradeAndValidateProject = async (folderName) => {
 };
 
 
-(async () => {
+console.log(projectGitPath(userName));
+
+ (async () => {
     installProjects();
     runShellScript(`touch ${SUMMARY_FILE}`);
     // rename .eslintrc.js temporarily to avoid the duplicated prettier config
