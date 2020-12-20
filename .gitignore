@@ -14,6 +14,7 @@ npm-debug.log
 
 ./lib/updateVisualComponents.js
 ./lib/utils/logDependency.js
+./.gitignore
 
 
 /projects-to-update/
