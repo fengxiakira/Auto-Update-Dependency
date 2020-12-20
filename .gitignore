@@ -12,9 +12,7 @@ node_modules/
 npm-debug.log
 .idea
 
-./lib/updateVisualComponents.js
-./lib/utils/logDependency.js
-./.gitignore
+
 
 
 /projects-to-update/
