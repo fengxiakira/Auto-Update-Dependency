@@ -1,6 +1,6 @@
 # AUTO-UPDATE-PROJECT-DEPENDENCIES #
 
-This project is inspired by a project from my internship. I refined the original one to fit for GitHub.<br>
+This project is inspired from my internship.<br>
 The aim of the project is to update specified dependencies of several projects automatically at the same time. All updated projects are located at `./projects-to-update`.
 It can do several validations for an updated project: `npm ls`, `npm audit`, run unit tests and component tests by `mocha`.When the update and validation are finished, an updated project will be pushed to a new branch.
 
@@ -51,12 +51,15 @@ updateSummary|It is at the root of an updated project. It records the details of
 
 ### Example of a npm-audit.html
 
+It is supported by `npm-audit-html`.
 ![](documentation/npm-audit.jpeg)
 
 ### Example results of unit tests
+
+It is supported by `mochawesome`.
 Results of component tests share the same format.
 
-![](documentation/)
+![](documentation/marge-report-1.0.1.png)
 
 ### Output
 
