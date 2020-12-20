@@ -1,8 +1,8 @@
 # AUTO-UPDATE-PROJECT-DEPENDENCIES #
 
 This project is inspired from my internship.<br>
-The aim of the project is to update specified dependencies of several projects automatically at the same time. All updated projects are located at `./projects-to-update`.
-It can do several validations for an updated project: `npm ls`, `npm audit`, run unit tests and component tests by `mocha`.When the update and validation are finished, an updated project will be pushed to a new branch.
+The aim of the project is to update specified dependencies of several repositories automatically at the same time. All updated projects are located at `./projects-to-update`.
+It can do several validations for an updated project: `npm ls`, `npm audit`, running unit tests and component tests by `mocha`.When the update and validation are finished, an updated project will be pushed to a new branch.
 
 Script | Description
 --- | ---
