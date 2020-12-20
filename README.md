@@ -56,7 +56,7 @@ updateSummary|It is at the root of an updated project. It records the details of
 ### Example results of unit tests
 Results of component tests share the same format.
 
-![](documentation/unit-tests.jpeg)
+![](documentation/)
 
 ### Output
 
