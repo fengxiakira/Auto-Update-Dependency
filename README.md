@@ -1,6 +1,6 @@
 # AUTO-UPDATE-PROJECT-DEPENDENCIES #
 
-This project is inspired by a project from my internship. Because of intellectual property, I deleted all info about the company and refined the original one to fit for GitHub.<br>
+This project is inspired by a project from my internship. I refined the original one to fit for GitHub.<br>
 The aim of the project is to update specified dependencies of several projects automatically at the same time. All updated projects are located at `./projects-to-update`.
 It can do several validations for an updated project: `npm ls`, `npm audit`, run unit tests and component tests by `mocha`.When the update and validation are finished, an updated project will be pushed to a new branch.
 
