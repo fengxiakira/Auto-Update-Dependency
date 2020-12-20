@@ -20,7 +20,8 @@ const ESLINT_RENAME = 'ignoreLint.js';
 const SUMMARY_FILE = 'summary.txt';
 
 
-const projectGitPath = (userName) => {
+
+const projectGitPath = () => {
     if(commandArgv.SSH){
         return projectsToUpdate.map(({name}) => `git@github.com:${userName}/${name}.git`);
     }
@@ -36,7 +37,7 @@ const installProjects = () => {
         fs.mkdirSync(projectToUpdateDirectory);
     }
 
-    const code = projectGitPath(userName).map((package) =>
+    const code = projectGitPath().map((package) =>
         runShellScriptNoExit(`cd ./projects-to-update && git clone ${package}`)
     );
 
@@ -54,10 +55,10 @@ const commitUpgradedProjectToNewBranch = async (folderName) => {
     runShellScript(`git checkout -b ${getDatedBranchName()}`);
     runShellScript('git add . && git commit -m "New packages updates available."');
     runShellScript(`git push -u origin ${getDatedBranchName()}`);
-    await open(``);
+    await open(`https://github.com/${userName}/${folderName}/tree/${getDatedBranchName()}`);
 }
 
-const validateUpgradedProject = async (result,folderName,isPackageJsonInAppFolder) => {
+const validateUpgradedProject = async (result,folderName,isPackageJsonAtRoot,packageJsonFolderName) => {
     const updatesToIgnore = (app = '') =>
         `### Dependencies Updates and Unit Tests Results\n${app}/test-reports\nupdateSummary\n${app}/npm-audit.html\n${app}/npm-ls-result.txt\n${app}/.jshintrc`;
     const testScriptForUpdatedProject = (testType) => `mkdir -p test-reports/${testType} && mocha --recursive --exit tests/${testType}  --reporter mochawesome --reporter-options reportDir=test-reports/${testType},reportFilename=${testType}TestReport`
@@ -75,15 +76,15 @@ const validateUpgradedProject = async (result,folderName,isPackageJsonInAppFolde
                 testScriptForUpdatedProject('component'),'Some component tests failed.'
             );
         }
-        if (isPackageJsonInAppFolder) {
+        if (isPackageJsonAtRoot) {
             try {
-                fs.appendFileSync(gitIgnoreFile(folderName), updatesToIgnore('app'));
+                fs.appendFileSync(gitIgnoreFile(folderName), updatesToIgnore());
             } catch (err) {
                 console.error(err);
             }
         } else {
             try {
-                fs.appendFileSync(gitIgnoreFile(folderName), updatesToIgnore());
+                fs.appendFileSync(gitIgnoreFile(folderName), updatesToIgnore(packageJsonFolderName));
             } catch (err) {
                 console.err(err);
             }
@@ -93,27 +94,29 @@ const validateUpgradedProject = async (result,folderName,isPackageJsonInAppFolde
     }
 }
 
+//async
 const upgradeAndValidateProject = async (folderName) => {
-    let isPackageJsonInAppFolder =
-        packageJsonFinder(`./projects-to-update/${folderName}`).next().filename === packageJsonFinder().next().filename;
-    const folderWithPackageJson = isPackageJsonInAppFolder
-        ? `./projects-to-update/${folderName}/app`
-        : `./projects-to-update/${folderName}`;
-    const folderPath = path.resolve(rootDirectory, folderWithPackageJson);
+    let defaultPackageJsonPath = `projects-to-update/${folderName}/package.json`
+    const packageJsonPath= packageJsonFinder(`./projects-to-update/${folderName}`).next().filename;
+    let isPackageJsonAtRoot = packageJsonPath === defaultPackageJsonPath;
+    const packageJsonFolderPath = packageJsonPath.replace('/package.json','');
+    const packageJsonFolderName = packageJsonPath.split('/').slice(-2,-1).toString();
+
+    const folderPath = path.resolve(rootDirectory, packageJsonFolderPath);
     const resetWorkingDirectory = () => process.chdir(rootDirectory);
 
     process.chdir(folderPath);
     runShellScript(`npm install`);
     const result = await updateVisualComponents(folderPath,folderName);
-    if(await validateUpgradedProject(result,folderName,isPackageJsonInAppFolder)){
+    if(await validateUpgradedProject(result,folderName,isPackageJsonAtRoot,packageJsonFolderName)){
         await commitUpgradedProjectToNewBranch(folderName);
     };
     resetWorkingDirectory();
     return result;
+
 };
 
 
-console.log(projectGitPath(userName));
 
  (async () => {
     installProjects();

@@ -1,14 +1,15 @@
-# DEPENDENCY-UTILS #
+# AUTO-UPDATE-PROJECT-DEPENDENCIES #
 
-This project is to update dependencies of several projects automatically at the same time. All updated projects are located at `./projects-to-update`.
-When the update is finished, the updated project will be pushed to a new branch.
+This project is inspired by a project from my internship. Because of intellectual property, I deleted all info about the company and refined the original one to fit for GitHub.<br>
+The aim of the project is to update specified dependencies of several projects automatically at the same time. All updated projects are located at `./projects-to-update`.
+It can do several validations for an updated project: `npm ls`, `npm audit`, run unit tests and component tests by `mocha`.When the update and validation are finished, an updated project will be pushed to a new branch.
 
 Script | Description
 --- | ---
 `updateProjectDependencies.js` | Update dependencies for projects that are specified at `config.js`.
 
 ## Command Line Configuration ##
-npm ls , npm audit , unit tests and component tests are run for updated projects by default.
+`npm ls` , `npm audit`, unit tests and component tests are run for updated projects by default.
 However, you can skip either unit tests or component tests.<br>
 Git clone configuration is the option that you can choose the way you like to clone projects. Please note that it is a mandatory.  
 
@@ -50,11 +51,12 @@ updateSummary|It is at the root of an updated project. It records the details of
 
 ### Example of a npm-audit.html
 
-![](documentation/npm-audit.png)
+![](documentation/npm-audit.jpeg)
+
 ### Example results of unit tests
 Results of component tests share the same format.
 
-![](documentation/unit-tests.png)
+![](documentation/unit-tests.jpeg)
 
 ### Output
 
@@ -62,8 +64,8 @@ After the update is finished, there will be a summery to describe which projects
 
 ```
 Here is the summary of the automated dependencies update:
-- The project receive updates: platform-api-service-copy
-- The project has no dependencies eligble to be automatically updated: managed-device-upload-service-copy
+- The project receive updates: sample1
+- The project has no dependencies eligble to be automatically updated: sample2
 
 ```
 

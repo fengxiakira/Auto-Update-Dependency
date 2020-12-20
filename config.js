@@ -4,13 +4,14 @@ const dependenciesItem = ({ packageName, updateByVersion = 'minor', ignore = fal
     ignore,
 });
 
-const packageInfo = [{ packageName: 'aws-sdk' }, { packageName: 'prettier' }];
+// NEED TO BE DEFINED BY YOU
+const packageInfo = [{ packageName: 'package1' }];
 
 const dependencies = packageInfo.map((element) => dependenciesItem(element));
 
 const config = {
     dependencies: dependencies,
-    projectsToUpdate: [{ name: 'emaily' }],
+    projectsToUpdate: [{ name: 'package2'}],
 };
 
 module.exports = { config };
